@@ -109,7 +109,7 @@ jobs:
 
   core:
     name: Build Core wheels ${{ matrix.abi }} for ${{ matrix.arch }} (musllinux_1_2)
-    if: github.repository_owner == 'home-assistant'
+    if: false && github.repository_owner == 'home-assistant'
     needs: init
     runs-on: ubuntu-latest
     strategy:
