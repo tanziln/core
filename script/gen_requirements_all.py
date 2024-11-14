@@ -600,14 +600,9 @@ def main(validate: bool, ci: bool) -> int:
 
     # Get analytics data
     analytics = asyncio.get_event_loop().run_until_complete(_get_analytics())
-    top_integrations = [
-        f"homeassistant.components.{i}"
-        for i, _ in sorted(
-            analytics.integrations.items(), key=lambda x: x[1], reverse=True
-        )
-    ]
+    top_integrations = [f"homeassistant.components.{i}" for i, c in analytics.integrations.items() if c > 1000]
 
-    top = top_integrations[:100]
+    top = top_integrations
 
     data_top = {}
 
