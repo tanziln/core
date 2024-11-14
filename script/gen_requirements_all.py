@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import difflib
 import importlib
 from operator import itemgetter
@@ -12,6 +13,11 @@ import re
 import sys
 import tomllib
 from typing import Any
+
+from python_homeassistant_analytics import (
+    CurrentAnalytics,
+    HomeassistantAnalyticsClient,
+)
 
 from homeassistant.util.yaml.loader import load_yaml
 from script.hassfest.model import Config, Integration
@@ -551,6 +557,11 @@ def diff_file(filename: str, content: str) -> list[str]:
     )
 
 
+async def _get_analytics() -> CurrentAnalytics:
+    client = HomeassistantAnalyticsClient()
+    return await client.get_current_analytics()
+
+
 def main(validate: bool, ci: bool) -> int:
     """Run the script."""
     if not Path("requirements_all.txt").is_file():
@@ -586,6 +597,31 @@ def main(validate: bool, ci: bool) -> int:
             (f"requirements_all_{action}.txt", reqs_all_file)
             for action, reqs_all_file in reqs_all_action_files.items()
         )
+
+    # Get analytics data
+    analytics = asyncio.get_event_loop().run_until_complete(_get_analytics())
+    top_integrations = [
+        f"homeassistant.components.{i}"
+        for i, _ in sorted(
+            analytics.integrations.items(), key=lambda x: x[1], reverse=True
+        )
+    ]
+
+    top = top_integrations[:100]
+
+    data_top = {}
+
+    for req, integrations in data.items():
+        for integration in integrations:
+            if integration in top:
+                data_top[req] = integrations
+
+    files.append(
+        (
+            "requirements_top.txt",
+            requirements_all_output(data_top),
+        )
+    )
 
     if validate:
         errors = []
