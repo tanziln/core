@@ -1489,7 +1489,7 @@ class ConfigEntriesFlowManager(
                 "exists",
                 core_behavior=ReportBehavior.LOG,
                 core_integration_behavior=ReportBehavior.LOG,
-                custom_integration_behavior=ReportBehavior.IGNORE,
+                custom_integration_behavior=ReportBehavior.LOG,
                 integration_domain=flow.handler,
             )
 
