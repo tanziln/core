@@ -7,15 +7,7 @@
     'type': 'result',
   })
 # ---
-# name: test_agents_download[with_hassio]
-  dict({
-    'id': 1,
-    'result': None,
-    'success': True,
-    'type': 'result',
-  })
-# ---
-# name: test_agents_download[without_hassio]
+# name: test_agents_download
   dict({
     'id': 1,
     'result': None,
@@ -45,22 +37,7 @@
     'type': 'result',
   })
 # ---
-# name: test_agents_info[with_hassio]
-  dict({
-    'id': 1,
-    'result': dict({
-      'agents': list([
-        dict({
-          'agent_id': 'domain.test',
-        }),
-      ]),
-      'syncing': False,
-    }),
-    'success': True,
-    'type': 'result',
-  })
-# ---
-# name: test_agents_info[without_hassio]
+# name: test_agents_info
   dict({
     'id': 1,
     'result': dict({
@@ -78,31 +55,28 @@
     'type': 'result',
   })
 # ---
-# name: test_agents_list_backups[with_hassio]
+# name: test_agents_list_backups
   dict({
     'id': 1,
     'result': list([
       dict({
+        'addons': list([
+          dict({
+            'name': 'Test',
+            'slug': 'test',
+            'version': '1.0.0',
+          }),
+        ]),
         'agent_id': 'domain.test',
         'backup_id': 'abc123',
+        'database_included': True,
         'date': '1970-01-01T00:00:00Z',
-        'name': 'Test',
-        'protected': False,
-        'size': 13.37,
-      }),
-    ]),
-    'success': True,
-    'type': 'result',
-  })
-# ---
-# name: test_agents_list_backups[without_hassio]
-  dict({
-    'id': 1,
-    'result': list([
-      dict({
-        'agent_id': 'domain.test',
-        'backup_id': 'abc123',
-        'date': '1970-01-01T00:00:00Z',
+        'folders': list([
+          'media',
+          'share',
+        ]),
+        'homeassistant_included': True,
+        'homeassistant_version': '2024.12.0',
         'name': 'Test',
         'protected': False,
         'size': 13.37,
@@ -338,172 +312,7 @@
     'type': 'result',
   })
 # ---
-# name: test_delete[with_hassio-remote_agents0-backups0]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_delete[with_hassio-remote_agents0-backups0].1
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 2,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_delete[with_hassio-remote_agents0-backups0].2
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 3,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_delete[with_hassio-remote_agents1-backups1]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_delete[with_hassio-remote_agents1-backups1].1
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 2,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_delete[with_hassio-remote_agents1-backups1].2
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 3,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_delete[with_hassio-remote_agents2-backups2]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_delete[with_hassio-remote_agents2-backups2].1
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 2,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_delete[with_hassio-remote_agents2-backups2].2
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 3,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_delete[with_hassio-remote_agents3-backups3]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_delete[with_hassio-remote_agents3-backups3].1
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 2,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_delete[with_hassio-remote_agents3-backups3].2
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 3,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_delete[with_hassio-remote_agents4-backups4]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_delete[with_hassio-remote_agents4-backups4].1
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 2,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_delete[with_hassio-remote_agents4-backups4].2
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 3,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_delete[without_hassio-remote_agents0-backups0]
+# name: test_delete[remote_agents0-backups0]
   dict({
     'id': 1,
     'result': dict({
@@ -517,7 +326,7 @@
     'type': 'result',
   })
 # ---
-# name: test_delete[without_hassio-remote_agents0-backups0].1
+# name: test_delete[remote_agents0-backups0].1
   dict({
     'id': 2,
     'result': None,
@@ -525,7 +334,7 @@
     'type': 'result',
   })
 # ---
-# name: test_delete[without_hassio-remote_agents0-backups0].2
+# name: test_delete[remote_agents0-backups0].2
   dict({
     'id': 3,
     'result': dict({
@@ -539,7 +348,7 @@
     'type': 'result',
   })
 # ---
-# name: test_delete[without_hassio-remote_agents1-backups1]
+# name: test_delete[remote_agents1-backups1]
   dict({
     'id': 1,
     'result': dict({
@@ -548,11 +357,25 @@
       'backing_up': False,
       'backups': list([
         dict({
+          'addons': list([
+            dict({
+              'name': 'Test',
+              'slug': 'test',
+              'version': '1.0.0',
+            }),
+          ]),
           'agent_ids': list([
             'backup.local',
           ]),
           'backup_id': 'abc123',
+          'database_included': True,
           'date': '1970-01-01T00:00:00.000Z',
+          'folders': list([
+            'media',
+            'share',
+          ]),
+          'homeassistant_included': True,
+          'homeassistant_version': '2024.12.0',
           'name': 'Test',
           'protected': False,
           'size': 0.0,
@@ -563,7 +386,7 @@
     'type': 'result',
   })
 # ---
-# name: test_delete[without_hassio-remote_agents1-backups1].1
+# name: test_delete[remote_agents1-backups1].1
   dict({
     'id': 2,
     'result': None,
@@ -571,7 +394,7 @@
     'type': 'result',
   })
 # ---
-# name: test_delete[without_hassio-remote_agents1-backups1].2
+# name: test_delete[remote_agents1-backups1].2
   dict({
     'id': 3,
     'result': dict({
@@ -585,7 +408,7 @@
     'type': 'result',
   })
 # ---
-# name: test_delete[without_hassio-remote_agents2-backups2]
+# name: test_delete[remote_agents2-backups2]
   dict({
     'id': 1,
     'result': dict({
@@ -594,11 +417,25 @@
       'backing_up': False,
       'backups': list([
         dict({
+          'addons': list([
+            dict({
+              'name': 'Test',
+              'slug': 'test',
+              'version': '1.0.0',
+            }),
+          ]),
           'agent_ids': list([
             'test.remote',
           ]),
           'backup_id': 'abc123',
+          'database_included': True,
           'date': '1970-01-01T00:00:00.000Z',
+          'folders': list([
+            'media',
+            'share',
+          ]),
+          'homeassistant_included': True,
+          'homeassistant_version': '2024.12.0',
           'name': 'Test',
           'protected': False,
           'size': 0.0,
@@ -609,7 +446,7 @@
     'type': 'result',
   })
 # ---
-# name: test_delete[without_hassio-remote_agents2-backups2].1
+# name: test_delete[remote_agents2-backups2].1
   dict({
     'id': 2,
     'result': None,
@@ -617,7 +454,7 @@
     'type': 'result',
   })
 # ---
-# name: test_delete[without_hassio-remote_agents2-backups2].2
+# name: test_delete[remote_agents2-backups2].2
   dict({
     'id': 3,
     'result': dict({
@@ -626,11 +463,25 @@
       'backing_up': False,
       'backups': list([
         dict({
+          'addons': list([
+            dict({
+              'name': 'Test',
+              'slug': 'test',
+              'version': '1.0.0',
+            }),
+          ]),
           'agent_ids': list([
             'test.remote',
           ]),
           'backup_id': 'abc123',
+          'database_included': True,
           'date': '1970-01-01T00:00:00.000Z',
+          'folders': list([
+            'media',
+            'share',
+          ]),
+          'homeassistant_included': True,
+          'homeassistant_version': '2024.12.0',
           'name': 'Test',
           'protected': False,
           'size': 0.0,
@@ -641,7 +492,7 @@
     'type': 'result',
   })
 # ---
-# name: test_delete[without_hassio-remote_agents3-backups3]
+# name: test_delete[remote_agents3-backups3]
   dict({
     'id': 1,
     'result': dict({
@@ -650,11 +501,20 @@
       'backing_up': False,
       'backups': list([
         dict({
+          'addons': list([
+          ]),
           'agent_ids': list([
             'test.remote',
           ]),
           'backup_id': 'def456',
+          'database_included': False,
           'date': '1980-01-01T00:00:00.000Z',
+          'folders': list([
+            'media',
+            'share',
+          ]),
+          'homeassistant_included': True,
+          'homeassistant_version': '2024.12.0',
           'name': 'Test 2',
           'protected': False,
           'size': 1.0,
@@ -665,7 +525,7 @@
     'type': 'result',
   })
 # ---
-# name: test_delete[without_hassio-remote_agents3-backups3].1
+# name: test_delete[remote_agents3-backups3].1
   dict({
     'id': 2,
     'result': None,
@@ -673,7 +533,7 @@
     'type': 'result',
   })
 # ---
-# name: test_delete[without_hassio-remote_agents3-backups3].2
+# name: test_delete[remote_agents3-backups3].2
   dict({
     'id': 3,
     'result': dict({
@@ -682,11 +542,20 @@
       'backing_up': False,
       'backups': list([
         dict({
+          'addons': list([
+          ]),
           'agent_ids': list([
             'test.remote',
           ]),
           'backup_id': 'def456',
+          'database_included': False,
           'date': '1980-01-01T00:00:00.000Z',
+          'folders': list([
+            'media',
+            'share',
+          ]),
+          'homeassistant_included': True,
+          'homeassistant_version': '2024.12.0',
           'name': 'Test 2',
           'protected': False,
           'size': 1.0,
@@ -697,7 +566,7 @@
     'type': 'result',
   })
 # ---
-# name: test_delete[without_hassio-remote_agents4-backups4]
+# name: test_delete[remote_agents4-backups4]
   dict({
     'id': 1,
     'result': dict({
@@ -706,12 +575,26 @@
       'backing_up': False,
       'backups': list([
         dict({
+          'addons': list([
+            dict({
+              'name': 'Test',
+              'slug': 'test',
+              'version': '1.0.0',
+            }),
+          ]),
           'agent_ids': list([
             'test.remote',
             'backup.local',
           ]),
           'backup_id': 'abc123',
+          'database_included': True,
           'date': '1970-01-01T00:00:00.000Z',
+          'folders': list([
+            'media',
+            'share',
+          ]),
+          'homeassistant_included': True,
+          'homeassistant_version': '2024.12.0',
           'name': 'Test',
           'protected': False,
           'size': 0.0,
@@ -722,7 +605,7 @@
     'type': 'result',
   })
 # ---
-# name: test_delete[without_hassio-remote_agents4-backups4].1
+# name: test_delete[remote_agents4-backups4].1
   dict({
     'id': 2,
     'result': None,
@@ -730,7 +613,7 @@
     'type': 'result',
   })
 # ---
-# name: test_delete[without_hassio-remote_agents4-backups4].2
+# name: test_delete[remote_agents4-backups4].2
   dict({
     'id': 3,
     'result': dict({
@@ -739,11 +622,25 @@
       'backing_up': False,
       'backups': list([
         dict({
+          'addons': list([
+            dict({
+              'name': 'Test',
+              'slug': 'test',
+              'version': '1.0.0',
+            }),
+          ]),
           'agent_ids': list([
             'test.remote',
           ]),
           'backup_id': 'abc123',
+          'database_included': True,
           'date': '1970-01-01T00:00:00.000Z',
+          'folders': list([
+            'media',
+            'share',
+          ]),
+          'homeassistant_included': True,
+          'homeassistant_version': '2024.12.0',
           'name': 'Test',
           'protected': False,
           'size': 0.0,
@@ -754,62 +651,7 @@
     'type': 'result',
   })
 # ---
-# name: test_details[with_hassio-remote_agents0-backups0]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_details[with_hassio-remote_agents1-backups1]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_details[with_hassio-remote_agents2-backups2]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_details[with_hassio-remote_agents3-backups3]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_details[with_hassio-remote_agents4-backups4]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_details[without_hassio-remote_agents0-backups0]
+# name: test_details[remote_agents0-backups0]
   dict({
     'id': 1,
     'result': dict({
@@ -821,18 +663,32 @@
     'type': 'result',
   })
 # ---
-# name: test_details[without_hassio-remote_agents1-backups1]
+# name: test_details[remote_agents1-backups1]
   dict({
     'id': 1,
     'result': dict({
       'agent_errors': dict({
       }),
       'backup': dict({
+        'addons': list([
+          dict({
+            'name': 'Test',
+            'slug': 'test',
+            'version': '1.0.0',
+          }),
+        ]),
         'agent_ids': list([
           'backup.local',
         ]),
         'backup_id': 'abc123',
+        'database_included': True,
         'date': '1970-01-01T00:00:00.000Z',
+        'folders': list([
+          'media',
+          'share',
+        ]),
+        'homeassistant_included': True,
+        'homeassistant_version': '2024.12.0',
         'name': 'Test',
         'protected': False,
         'size': 0.0,
@@ -842,18 +698,32 @@
     'type': 'result',
   })
 # ---
-# name: test_details[without_hassio-remote_agents2-backups2]
+# name: test_details[remote_agents2-backups2]
   dict({
     'id': 1,
     'result': dict({
       'agent_errors': dict({
       }),
       'backup': dict({
+        'addons': list([
+          dict({
+            'name': 'Test',
+            'slug': 'test',
+            'version': '1.0.0',
+          }),
+        ]),
         'agent_ids': list([
           'test.remote',
         ]),
         'backup_id': 'abc123',
+        'database_included': True,
         'date': '1970-01-01T00:00:00.000Z',
+        'folders': list([
+          'media',
+          'share',
+        ]),
+        'homeassistant_included': True,
+        'homeassistant_version': '2024.12.0',
         'name': 'Test',
         'protected': False,
         'size': 0.0,
@@ -863,7 +733,7 @@
     'type': 'result',
   })
 # ---
-# name: test_details[without_hassio-remote_agents3-backups3]
+# name: test_details[remote_agents3-backups3]
   dict({
     'id': 1,
     'result': dict({
@@ -875,19 +745,33 @@
     'type': 'result',
   })
 # ---
-# name: test_details[without_hassio-remote_agents4-backups4]
+# name: test_details[remote_agents4-backups4]
   dict({
     'id': 1,
     'result': dict({
       'agent_errors': dict({
       }),
       'backup': dict({
+        'addons': list([
+          dict({
+            'name': 'Test',
+            'slug': 'test',
+            'version': '1.0.0',
+          }),
+        ]),
         'agent_ids': list([
           'test.remote',
           'backup.local',
         ]),
         'backup_id': 'abc123',
+        'database_included': True,
         'date': '1970-01-01T00:00:00.000Z',
+        'folders': list([
+          'media',
+          'share',
+        ]),
+        'homeassistant_included': True,
+        'homeassistant_version': '2024.12.0',
         'name': 'Test',
         'protected': False,
         'size': 0.0,
@@ -905,11 +789,25 @@
         'domain.test': 'The backup agent is unreachable.',
       }),
       'backup': dict({
+        'addons': list([
+          dict({
+            'name': 'Test',
+            'slug': 'test',
+            'version': '1.0.0',
+          }),
+        ]),
         'agent_ids': list([
           'backup.local',
         ]),
         'backup_id': 'abc123',
+        'database_included': True,
         'date': '1970-01-01T00:00:00.000Z',
+        'folders': list([
+          'media',
+          'share',
+        ]),
+        'homeassistant_included': True,
+        'homeassistant_version': '2024.12.0',
         'name': 'Test',
         'protected': False,
         'size': 0.0,
@@ -930,40 +828,7 @@
     'type': 'result',
   })
 # ---
-# name: test_generate[with_hassio-None]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_generate[with_hassio-data1]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_generate[with_hassio-data2]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_generate[without_hassio-None]
+# name: test_generate[None]
   dict({
     'id': 1,
     'result': dict({
@@ -973,7 +838,7 @@
     'type': 'result',
   })
 # ---
-# name: test_generate[without_hassio-None].1
+# name: test_generate[None].1
   dict({
     'event': dict({
       'done': True,
@@ -984,7 +849,7 @@
     'type': 'event',
   })
 # ---
-# name: test_generate[without_hassio-data1]
+# name: test_generate[data1]
   dict({
     'id': 1,
     'result': dict({
@@ -994,7 +859,7 @@
     'type': 'result',
   })
 # ---
-# name: test_generate[without_hassio-data1].1
+# name: test_generate[data1].1
   dict({
     'event': dict({
       'done': True,
@@ -1005,7 +870,7 @@
     'type': 'event',
   })
 # ---
-# name: test_generate[without_hassio-data2]
+# name: test_generate[data2]
   dict({
     'id': 1,
     'result': dict({
@@ -1015,7 +880,7 @@
     'type': 'result',
   })
 # ---
-# name: test_generate[without_hassio-data2].1
+# name: test_generate[data2].1
   dict({
     'event': dict({
       'done': True,
@@ -1046,51 +911,7 @@
     'type': 'result',
   })
 # ---
-# name: test_info[with_hassio-remote_agents0-remote_backups0]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_info[with_hassio-remote_agents1-remote_backups1]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_info[with_hassio-remote_agents2-remote_backups2]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_info[with_hassio-remote_agents3-remote_backups3]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_info[without_hassio-remote_agents0-remote_backups0]
+# name: test_info[remote_agents0-remote_backups0]
   dict({
     'id': 1,
     'result': dict({
@@ -1099,11 +920,25 @@
       'backing_up': False,
       'backups': list([
         dict({
+          'addons': list([
+            dict({
+              'name': 'Test',
+              'slug': 'test',
+              'version': '1.0.0',
+            }),
+          ]),
           'agent_ids': list([
             'backup.local',
           ]),
           'backup_id': 'abc123',
+          'database_included': True,
           'date': '1970-01-01T00:00:00.000Z',
+          'folders': list([
+            'media',
+            'share',
+          ]),
+          'homeassistant_included': True,
+          'homeassistant_version': '2024.12.0',
           'name': 'Test',
           'protected': False,
           'size': 0.0,
@@ -1114,7 +949,7 @@
     'type': 'result',
   })
 # ---
-# name: test_info[without_hassio-remote_agents1-remote_backups1]
+# name: test_info[remote_agents1-remote_backups1]
   dict({
     'id': 1,
     'result': dict({
@@ -1123,11 +958,25 @@
       'backing_up': False,
       'backups': list([
         dict({
+          'addons': list([
+            dict({
+              'name': 'Test',
+              'slug': 'test',
+              'version': '1.0.0',
+            }),
+          ]),
           'agent_ids': list([
             'backup.local',
           ]),
           'backup_id': 'abc123',
+          'database_included': True,
           'date': '1970-01-01T00:00:00.000Z',
+          'folders': list([
+            'media',
+            'share',
+          ]),
+          'homeassistant_included': True,
+          'homeassistant_version': '2024.12.0',
           'name': 'Test',
           'protected': False,
           'size': 0.0,
@@ -1138,7 +987,7 @@
     'type': 'result',
   })
 # ---
-# name: test_info[without_hassio-remote_agents2-remote_backups2]
+# name: test_info[remote_agents2-remote_backups2]
   dict({
     'id': 1,
     'result': dict({
@@ -1147,12 +996,26 @@
       'backing_up': False,
       'backups': list([
         dict({
+          'addons': list([
+            dict({
+              'name': 'Test',
+              'slug': 'test',
+              'version': '1.0.0',
+            }),
+          ]),
           'agent_ids': list([
             'test.remote',
             'backup.local',
           ]),
           'backup_id': 'abc123',
+          'database_included': True,
           'date': '1970-01-01T00:00:00.000Z',
+          'folders': list([
+            'media',
+            'share',
+          ]),
+          'homeassistant_included': True,
+          'homeassistant_version': '2024.12.0',
           'name': 'Test',
           'protected': False,
           'size': 0.0,
@@ -1163,7 +1026,7 @@
     'type': 'result',
   })
 # ---
-# name: test_info[without_hassio-remote_agents3-remote_backups3]
+# name: test_info[remote_agents3-remote_backups3]
   dict({
     'id': 1,
     'result': dict({
@@ -1172,21 +1035,44 @@
       'backing_up': False,
       'backups': list([
         dict({
+          'addons': list([
+          ]),
           'agent_ids': list([
             'test.remote',
           ]),
           'backup_id': 'def456',
+          'database_included': False,
           'date': '1980-01-01T00:00:00.000Z',
+          'folders': list([
+            'media',
+            'share',
+          ]),
+          'homeassistant_included': True,
+          'homeassistant_version': '2024.12.0',
           'name': 'Test 2',
           'protected': False,
           'size': 1.0,
         }),
         dict({
+          'addons': list([
+            dict({
+              'name': 'Test',
+              'slug': 'test',
+              'version': '1.0.0',
+            }),
+          ]),
           'agent_ids': list([
             'backup.local',
           ]),
           'backup_id': 'abc123',
+          'database_included': True,
           'date': '1970-01-01T00:00:00.000Z',
+          'folders': list([
+            'media',
+            'share',
+          ]),
+          'homeassistant_included': True,
+          'homeassistant_version': '2024.12.0',
           'name': 'Test',
           'protected': False,
           'size': 0.0,
@@ -1207,11 +1093,25 @@
       'backing_up': False,
       'backups': list([
         dict({
+          'addons': list([
+            dict({
+              'name': 'Test',
+              'slug': 'test',
+              'version': '1.0.0',
+            }),
+          ]),
           'agent_ids': list([
             'backup.local',
           ]),
           'backup_id': 'abc123',
+          'database_included': True,
           'date': '1970-01-01T00:00:00.000Z',
+          'folders': list([
+            'media',
+            'share',
+          ]),
+          'homeassistant_included': True,
+          'homeassistant_version': '2024.12.0',
           'name': 'Test',
           'protected': False,
           'size': 0.0,
@@ -1233,35 +1133,7 @@
     'type': 'result',
   })
 # ---
-# name: test_restore_local_agent[with_hassio-backups0]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_restore_local_agent[with_hassio-backups0].1
-  0
-# ---
-# name: test_restore_local_agent[with_hassio-backups1]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_restore_local_agent[with_hassio-backups1].1
-  0
-# ---
-# name: test_restore_local_agent[without_hassio-backups0]
+# name: test_restore_local_agent[backups0]
   dict({
     'error': dict({
       'code': 'home_assistant_error',
@@ -1272,10 +1144,10 @@
     'type': 'result',
   })
 # ---
-# name: test_restore_local_agent[without_hassio-backups0].1
+# name: test_restore_local_agent[backups0].1
   0
 # ---
-# name: test_restore_local_agent[without_hassio-backups1]
+# name: test_restore_local_agent[backups1]
   dict({
     'id': 1,
     'result': None,
@@ -1283,38 +1155,10 @@
     'type': 'result',
   })
 # ---
-# name: test_restore_local_agent[without_hassio-backups1].1
+# name: test_restore_local_agent[backups1].1
   1
 # ---
-# name: test_restore_remote_agent[with_hassio-remote_agents0-backups0]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_restore_remote_agent[with_hassio-remote_agents0-backups0].1
-  0
-# ---
-# name: test_restore_remote_agent[with_hassio-remote_agents1-backups1]
-  dict({
-    'error': dict({
-      'code': 'unknown_command',
-      'message': 'Unknown command.',
-    }),
-    'id': 1,
-    'success': False,
-    'type': 'result',
-  })
-# ---
-# name: test_restore_remote_agent[with_hassio-remote_agents1-backups1].1
-  0
-# ---
-# name: test_restore_remote_agent[without_hassio-remote_agents0-backups0]
+# name: test_restore_remote_agent[remote_agents0-backups0]
   dict({
     'error': dict({
       'code': 'home_assistant_error',
@@ -1325,10 +1169,10 @@
     'type': 'result',
   })
 # ---
-# name: test_restore_remote_agent[without_hassio-remote_agents0-backups0].1
+# name: test_restore_remote_agent[remote_agents0-backups0].1
   0
 # ---
-# name: test_restore_remote_agent[without_hassio-remote_agents1-backups1]
+# name: test_restore_remote_agent[remote_agents1-backups1]
   dict({
     'id': 1,
     'result': None,
@@ -1336,6 +1180,6 @@
     'type': 'result',
   })
 # ---
-# name: test_restore_remote_agent[without_hassio-remote_agents1-backups1].1
+# name: test_restore_remote_agent[remote_agents1-backups1].1
   1
 # ---

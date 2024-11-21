@@ -8,12 +8,13 @@ from unittest.mock import AsyncMock, Mock, patch
 
 from homeassistant.components.backup import (
     DOMAIN,
+    AgentBackup,
     BackupAgent,
     BackupAgentPlatformProtocol,
-    BaseBackup,
 )
 from homeassistant.components.backup.const import DATA_MANAGER
 from homeassistant.components.backup.manager import Backup
+from homeassistant.components.backup.models import AddonInfo
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.typing import ConfigType
 from homeassistant.setup import async_setup_component
@@ -22,18 +23,28 @@ from tests.common import MockPlatform, mock_platform
 
 LOCAL_AGENT_ID = f"{DOMAIN}.local"
 
-TEST_BASE_BACKUP_ABC123 = BaseBackup(
+TEST_BACKUP_ABC123 = AgentBackup(
+    addons=[AddonInfo(name="Test", slug="test", version="1.0.0")],
     backup_id="abc123",
+    database_included=True,
     date="1970-01-01T00:00:00.000Z",
+    folders=["media", "share"],
+    homeassistant_included=True,
+    homeassistant_version="2024.12.0",
     name="Test",
     protected=False,
     size=0.0,
 )
 TEST_BACKUP_PATH_ABC123 = Path("abc123.tar")
 
-TEST_BASE_BACKUP_DEF456 = BaseBackup(
+TEST_BACKUP_DEF456 = AgentBackup(
+    addons=[],
     backup_id="def456",
+    database_included=False,
     date="1980-01-01T00:00:00.000Z",
+    folders=["media", "share"],
+    homeassistant_included=True,
+    homeassistant_version="2024.12.0",
     name="Test 2",
     protected=False,
     size=1.0,
@@ -45,14 +56,19 @@ TEST_DOMAIN = "test"
 class BackupAgentTest(BackupAgent):
     """Test backup agent."""
 
-    def __init__(self, name: str, backups: list[BaseBackup] | None = None) -> None:
+    def __init__(self, name: str, backups: list[AgentBackup] | None = None) -> None:
         """Initialize the backup agent."""
         self.name = name
         if backups is None:
             backups = [
-                BaseBackup(
+                AgentBackup(
+                    addons=[AddonInfo(name="Test", slug="test", version="1.0.0")],
                     backup_id="abc123",
+                    database_included=True,
                     date="1970-01-01T00:00:00Z",
+                    folders=["media", "share"],
+                    homeassistant_included=True,
+                    homeassistant_version="2024.12.0",
                     name="Test",
                     protected=False,
                     size=13.37,
@@ -74,14 +90,13 @@ class BackupAgentTest(BackupAgent):
         self,
         *,
         path: Path,
-        backup: BaseBackup,
-        homeassistant_version: str,
+        backup: AgentBackup,
         **kwargs: Any,
     ) -> None:
         """Upload a backup."""
         self._backups[backup.backup_id] = backup
 
-    async def async_list_backups(self, **kwargs: Any) -> list[BaseBackup]:
+    async def async_list_backups(self, **kwargs: Any) -> list[AgentBackup]:
         """List backups."""
         return list(self._backups.values())
 
@@ -89,7 +104,7 @@ class BackupAgentTest(BackupAgent):
         self,
         backup_id: str,
         **kwargs: Any,
-    ) -> BaseBackup | None:
+    ) -> AgentBackup | None:
         """Return a backup."""
         return self._backups.get(backup_id)
 
@@ -129,10 +144,12 @@ async def setup_backup_integration(
 
         result = await async_setup_component(hass, DOMAIN, configuration or {})
         await hass.async_block_till_done()
-        if with_hassio or not backups:
+        if not backups:
             return result
 
         for agent_id, agent_backups in backups.items():
+            if with_hassio and agent_id == LOCAL_AGENT_ID:
+                continue
             agent = hass.data[DATA_MANAGER].backup_agents[agent_id]
             agent._backups = {backups.backup_id: backups for backups in agent_backups}
             if agent_id == LOCAL_AGENT_ID:

@@ -8,7 +8,7 @@ from freezegun.api import FrozenDateTimeFactory
 import pytest
 from syrupy import SnapshotAssertion
 
-from homeassistant.components.backup import BaseBackup
+from homeassistant.components.backup import AgentBackup
 from homeassistant.components.backup.agent import BackupAgentUnreachableError
 from homeassistant.components.backup.const import DATA_MANAGER, DOMAIN
 from homeassistant.components.backup.manager import NewBackup
@@ -17,8 +17,8 @@ from homeassistant.exceptions import HomeAssistantError
 
 from .common import (
     LOCAL_AGENT_ID,
-    TEST_BASE_BACKUP_ABC123,
-    TEST_BASE_BACKUP_DEF456,
+    TEST_BACKUP_ABC123,
+    TEST_BACKUP_DEF456,
     BackupAgentTest,
     setup_backup_integration,
 )
@@ -44,30 +44,22 @@ def sync_access_token_proxy(
     [
         ([], {}),
         (["remote"], {}),
-        (["remote"], {"test.remote": [TEST_BASE_BACKUP_ABC123]}),
-        (["remote"], {"test.remote": [TEST_BASE_BACKUP_DEF456]}),
-    ],
-)
-@pytest.mark.parametrize(
-    "with_hassio",
-    [
-        pytest.param(True, id="with_hassio"),
-        pytest.param(False, id="without_hassio"),
+        (["remote"], {"test.remote": [TEST_BACKUP_ABC123]}),
+        (["remote"], {"test.remote": [TEST_BACKUP_DEF456]}),
     ],
 )
 async def test_info(
     hass: HomeAssistant,
     hass_ws_client: WebSocketGenerator,
-    with_hassio: bool,
     remote_agents: list[str],
-    remote_backups: dict[str, list[BaseBackup]],
+    remote_backups: dict[str, list[AgentBackup]],
     snapshot: SnapshotAssertion,
 ) -> None:
     """Test getting backup info."""
     await setup_backup_integration(
         hass,
-        with_hassio=with_hassio,
-        backups={LOCAL_AGENT_ID: [TEST_BASE_BACKUP_ABC123]} | remote_backups,
+        with_hassio=False,
+        backups={LOCAL_AGENT_ID: [TEST_BACKUP_ABC123]} | remote_backups,
         remote_agents=remote_agents,
     )
 
@@ -89,7 +81,7 @@ async def test_info_with_errors(
 ) -> None:
     """Test getting backup info with one unavailable agent."""
     await setup_backup_integration(
-        hass, with_hassio=False, backups={LOCAL_AGENT_ID: [TEST_BASE_BACKUP_ABC123]}
+        hass, with_hassio=False, backups={LOCAL_AGENT_ID: [TEST_BACKUP_ABC123]}
     )
     hass.data[DATA_MANAGER].backup_agents["domain.test"] = BackupAgentTest("test")
 
@@ -105,36 +97,28 @@ async def test_info_with_errors(
     ("remote_agents", "backups"),
     [
         ([], {}),
-        (["remote"], {LOCAL_AGENT_ID: [TEST_BASE_BACKUP_ABC123]}),
-        (["remote"], {"test.remote": [TEST_BASE_BACKUP_ABC123]}),
-        (["remote"], {"test.remote": [TEST_BASE_BACKUP_DEF456]}),
+        (["remote"], {LOCAL_AGENT_ID: [TEST_BACKUP_ABC123]}),
+        (["remote"], {"test.remote": [TEST_BACKUP_ABC123]}),
+        (["remote"], {"test.remote": [TEST_BACKUP_DEF456]}),
         (
             ["remote"],
             {
-                LOCAL_AGENT_ID: [TEST_BASE_BACKUP_ABC123],
-                "test.remote": [TEST_BASE_BACKUP_ABC123],
+                LOCAL_AGENT_ID: [TEST_BACKUP_ABC123],
+                "test.remote": [TEST_BACKUP_ABC123],
             },
         ),
-    ],
-)
-@pytest.mark.parametrize(
-    "with_hassio",
-    [
-        pytest.param(True, id="with_hassio"),
-        pytest.param(False, id="without_hassio"),
     ],
 )
 async def test_details(
     hass: HomeAssistant,
     hass_ws_client: WebSocketGenerator,
-    with_hassio: bool,
     remote_agents: list[str],
-    backups: dict[str, BaseBackup],
+    backups: dict[str, AgentBackup],
     snapshot: SnapshotAssertion,
 ) -> None:
     """Test getting backup info."""
     await setup_backup_integration(
-        hass, with_hassio=with_hassio, backups=backups, remote_agents=remote_agents
+        hass, with_hassio=False, backups=backups, remote_agents=remote_agents
     )
 
     client = await hass_ws_client(hass)
@@ -158,7 +142,7 @@ async def test_details_with_errors(
 ) -> None:
     """Test getting backup info with one unavailable agent."""
     await setup_backup_integration(
-        hass, with_hassio=False, backups={LOCAL_AGENT_ID: [TEST_BASE_BACKUP_ABC123]}
+        hass, with_hassio=False, backups={LOCAL_AGENT_ID: [TEST_BACKUP_ABC123]}
     )
     hass.data[DATA_MANAGER].backup_agents["domain.test"] = BackupAgentTest("test")
 
@@ -179,36 +163,28 @@ async def test_details_with_errors(
     ("remote_agents", "backups"),
     [
         ([], {}),
-        (["remote"], {LOCAL_AGENT_ID: [TEST_BASE_BACKUP_ABC123]}),
-        (["remote"], {"test.remote": [TEST_BASE_BACKUP_ABC123]}),
-        (["remote"], {"test.remote": [TEST_BASE_BACKUP_DEF456]}),
+        (["remote"], {LOCAL_AGENT_ID: [TEST_BACKUP_ABC123]}),
+        (["remote"], {"test.remote": [TEST_BACKUP_ABC123]}),
+        (["remote"], {"test.remote": [TEST_BACKUP_DEF456]}),
         (
             ["remote"],
             {
-                LOCAL_AGENT_ID: [TEST_BASE_BACKUP_ABC123],
-                "test.remote": [TEST_BASE_BACKUP_ABC123],
+                LOCAL_AGENT_ID: [TEST_BACKUP_ABC123],
+                "test.remote": [TEST_BACKUP_ABC123],
             },
         ),
-    ],
-)
-@pytest.mark.parametrize(
-    "with_hassio",
-    [
-        pytest.param(True, id="with_hassio"),
-        pytest.param(False, id="without_hassio"),
     ],
 )
 async def test_delete(
     hass: HomeAssistant,
     hass_ws_client: WebSocketGenerator,
-    with_hassio: bool,
     remote_agents: list[str],
-    backups: dict[str, BaseBackup],
+    backups: dict[str, AgentBackup],
     snapshot: SnapshotAssertion,
 ) -> None:
     """Test deleting a backup file."""
     await setup_backup_integration(
-        hass, with_hassio=with_hassio, backups=backups, remote_agents=remote_agents
+        hass, with_hassio=False, backups=backups, remote_agents=remote_agents
     )
 
     client = await hass_ws_client(hass)
@@ -217,7 +193,7 @@ async def test_delete(
     await client.send_json_auto_id({"type": "backup/info"})
     assert await client.receive_json() == snapshot
 
-    await client.send_json_auto_id({"type": "backup/remove", "backup_id": "abc123"})
+    await client.send_json_auto_id({"type": "backup/delete", "backup_id": "abc123"})
     assert await client.receive_json() == snapshot
 
     await client.send_json_auto_id({"type": "backup/info"})
@@ -239,7 +215,7 @@ async def test_agent_delete_backup(
     with patch.object(BackupAgentTest, "async_delete_backup") as delete_mock:
         await client.send_json_auto_id(
             {
-                "type": "backup/remove",
+                "type": "backup/delete",
                 "backup_id": "abc123",
             }
         )
@@ -256,13 +232,6 @@ async def test_agent_delete_backup(
         {"password": "abc123"},
     ],
 )
-@pytest.mark.parametrize(
-    ("with_hassio", "number_of_messages"),
-    [
-        pytest.param(True, 1, id="with_hassio"),
-        pytest.param(False, 2, id="without_hassio"),
-    ],
-)
 @pytest.mark.usefixtures("mock_backup_generation")
 async def test_generate(
     hass: HomeAssistant,
@@ -270,11 +239,9 @@ async def test_generate(
     data: dict[str, Any] | None,
     freezer: FrozenDateTimeFactory,
     snapshot: SnapshotAssertion,
-    with_hassio: bool,
-    number_of_messages: int,
 ) -> None:
     """Test generating a backup."""
-    await setup_backup_integration(hass, with_hassio=with_hassio)
+    await setup_backup_integration(hass, with_hassio=False)
 
     client = await hass_ws_client(hass)
     freezer.move_to("2024-11-13 12:01:00+01:00")
@@ -283,7 +250,7 @@ async def test_generate(
     await client.send_json_auto_id(
         {"type": "backup/generate", **{"agent_ids": ["backup.local"]} | (data or {})}
     )
-    for _ in range(number_of_messages):
+    for _ in range(2):
         assert await client.receive_json() == snapshot
 
 
@@ -294,17 +261,17 @@ async def test_generate(
         ({"agent_ids": ["backup.local"]}, {"agent_ids": ["backup.local"]}),
         (
             {
-                "addons_included": ["ssl"],
                 "agent_ids": ["backup.local"],
-                "database_included": False,
-                "folders_included": ["media"],
+                "include_addons": ["ssl"],
+                "include_database": False,
+                "include_folders": ["media"],
                 "name": "abc123",
             },
             {
-                "addons_included": ["ssl"],
                 "agent_ids": ["backup.local"],
-                "database_included": False,
-                "folders_included": ["media"],
+                "include_addons": ["ssl"],
+                "include_database": False,
+                "include_folders": ["media"],
                 "name": "abc123",
             },
         ),
@@ -327,15 +294,17 @@ async def test_generate_without_hassio(
 
     with patch(
         "homeassistant.components.backup.manager.BackupManager.async_create_backup",
-        return_value=NewBackup("abc123"),
+        return_value=NewBackup(backup_job_id="abc123"),
     ) as generate_backup:
         await client.send_json_auto_id({"type": "backup/generate"} | params)
         assert await client.receive_json() == snapshot
         generate_backup.assert_called_once_with(
             **{
-                "addons_included": None,
-                "database_included": True,
-                "folders_included": None,
+                "include_all_addons": False,
+                "include_homeassistant": True,
+                "include_addons": None,
+                "include_database": True,
+                "include_folders": None,
                 "name": None,
                 "on_progress": ANY,
                 "password": None,
@@ -348,25 +317,17 @@ async def test_generate_without_hassio(
     "backups",
     [
         {},
-        {LOCAL_AGENT_ID: [TEST_BASE_BACKUP_ABC123]},
-    ],
-)
-@pytest.mark.parametrize(
-    "with_hassio",
-    [
-        pytest.param(True, id="with_hassio"),
-        pytest.param(False, id="without_hassio"),
+        {LOCAL_AGENT_ID: [TEST_BACKUP_ABC123]},
     ],
 )
 async def test_restore_local_agent(
     hass: HomeAssistant,
     hass_ws_client: WebSocketGenerator,
-    with_hassio: bool,
-    backups: dict[str, BaseBackup],
+    backups: dict[str, AgentBackup],
     snapshot: SnapshotAssertion,
 ) -> None:
     """Test calling the restore command."""
-    await setup_backup_integration(hass, with_hassio=with_hassio, backups=backups)
+    await setup_backup_integration(hass, with_hassio=False, backups=backups)
     restart_calls = async_mock_service(hass, "homeassistant", "restart")
 
     client = await hass_ws_client(hass)
@@ -391,27 +352,19 @@ async def test_restore_local_agent(
     ("remote_agents", "backups"),
     [
         (["remote"], {}),
-        (["remote"], {"test.remote": [TEST_BASE_BACKUP_ABC123]}),
-    ],
-)
-@pytest.mark.parametrize(
-    "with_hassio",
-    [
-        pytest.param(True, id="with_hassio"),
-        pytest.param(False, id="without_hassio"),
+        (["remote"], {"test.remote": [TEST_BACKUP_ABC123]}),
     ],
 )
 async def test_restore_remote_agent(
     hass: HomeAssistant,
     hass_ws_client: WebSocketGenerator,
-    with_hassio: bool,
     remote_agents: list[str],
-    backups: dict[str, BaseBackup],
+    backups: dict[str, AgentBackup],
     snapshot: SnapshotAssertion,
 ) -> None:
     """Test calling the restore command."""
     await setup_backup_integration(
-        hass, with_hassio=with_hassio, backups=backups, remote_agents=remote_agents
+        hass, with_hassio=False, backups=backups, remote_agents=remote_agents
     )
     restart_calls = async_mock_service(hass, "homeassistant", "restart")
 
@@ -441,6 +394,7 @@ async def test_restore_remote_agent(
         pytest.param(False, id="without_hassio"),
     ],
 )
+@pytest.mark.usefixtures("supervisor_client")
 async def test_backup_end(
     hass: HomeAssistant,
     hass_ws_client: WebSocketGenerator,
@@ -474,6 +428,7 @@ async def test_backup_end(
         pytest.param(False, id="without_hassio"),
     ],
 )
+@pytest.mark.usefixtures("supervisor_client")
 async def test_backup_start(
     hass: HomeAssistant,
     hass_ws_client: WebSocketGenerator,
@@ -504,6 +459,7 @@ async def test_backup_start(
         Exception("Boom"),
     ],
 )
+@pytest.mark.usefixtures("supervisor_client")
 async def test_backup_end_exception(
     hass: HomeAssistant,
     hass_ws_client: WebSocketGenerator,
@@ -533,6 +489,7 @@ async def test_backup_end_exception(
         Exception("Boom"),
     ],
 )
+@pytest.mark.usefixtures("supervisor_client")
 async def test_backup_start_exception(
     hass: HomeAssistant,
     hass_ws_client: WebSocketGenerator,
@@ -554,21 +511,13 @@ async def test_backup_start_exception(
         assert await client.receive_json() == snapshot
 
 
-@pytest.mark.parametrize(
-    "with_hassio",
-    [
-        pytest.param(True, id="with_hassio"),
-        pytest.param(False, id="without_hassio"),
-    ],
-)
 async def test_agents_info(
     hass: HomeAssistant,
     hass_ws_client: WebSocketGenerator,
     snapshot: SnapshotAssertion,
-    with_hassio: bool,
 ) -> None:
     """Test getting backup agents info."""
-    await setup_backup_integration(hass, with_hassio=with_hassio)
+    await setup_backup_integration(hass, with_hassio=False)
     hass.data[DATA_MANAGER].backup_agents["domain.test"] = BackupAgentTest("test")
 
     client = await hass_ws_client(hass)
@@ -578,21 +527,13 @@ async def test_agents_info(
     assert await client.receive_json() == snapshot
 
 
-@pytest.mark.parametrize(
-    "with_hassio",
-    [
-        pytest.param(True, id="with_hassio"),
-        pytest.param(False, id="without_hassio"),
-    ],
-)
 async def test_agents_list_backups(
     hass: HomeAssistant,
     hass_ws_client: WebSocketGenerator,
     snapshot: SnapshotAssertion,
-    with_hassio: bool,
 ) -> None:
     """Test backup agents list backups details."""
-    await setup_backup_integration(hass, with_hassio=with_hassio)
+    await setup_backup_integration(hass, with_hassio=False)
     hass.data[DATA_MANAGER].backup_agents["domain.test"] = BackupAgentTest("test")
 
     client = await hass_ws_client(hass)
@@ -602,21 +543,13 @@ async def test_agents_list_backups(
     assert await client.receive_json() == snapshot
 
 
-@pytest.mark.parametrize(
-    "with_hassio",
-    [
-        pytest.param(True, id="with_hassio"),
-        pytest.param(False, id="without_hassio"),
-    ],
-)
 async def test_agents_download(
     hass: HomeAssistant,
     hass_ws_client: WebSocketGenerator,
     snapshot: SnapshotAssertion,
-    with_hassio: bool,
 ) -> None:
     """Test WS command to start downloading a backup."""
-    await setup_backup_integration(hass, with_hassio=with_hassio)
+    await setup_backup_integration(hass, with_hassio=False)
     hass.data[DATA_MANAGER].backup_agents["domain.test"] = BackupAgentTest("test")
 
     client = await hass_ws_client(hass)
