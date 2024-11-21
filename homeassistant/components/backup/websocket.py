@@ -9,6 +9,7 @@ from homeassistant.core import HomeAssistant, callback
 
 from .const import DATA_MANAGER, LOGGER
 from .manager import BackupProgress
+from .models import Folder
 
 
 @callback
@@ -49,7 +50,7 @@ async def handle_info(
             "agent_errors": {
                 agent_id: str(err) for agent_id, err in agent_errors.items()
             },
-            "backups": [b.as_dict() for b in backups.values()],
+            "backups": list(backups.values()),
             "backing_up": manager.backup_task is not None,
         },
     )
@@ -97,8 +98,15 @@ async def handle_delete(
     msg: dict[str, Any],
 ) -> None:
     """Delete a backup."""
-    await hass.data[DATA_MANAGER].async_delete_backup(msg["backup_id"])
-    connection.send_result(msg["id"])
+    agent_errors = await hass.data[DATA_MANAGER].async_delete_backup(msg["backup_id"])
+    connection.send_result(
+        msg["id"],
+        {
+            "agent_errors": {
+                agent_id: str(err) for agent_id, err in agent_errors.items()
+            }
+        },
+    )
 
 
 @websocket_api.require_admin
@@ -133,7 +141,7 @@ async def handle_restore(
         vol.Optional("include_addons"): [str],
         vol.Optional("include_all_addons", default=False): bool,
         vol.Optional("include_database", default=True): bool,
-        vol.Optional("include_folders"): [str],
+        vol.Optional("include_folders"): [vol.Coerce(Folder)],
         vol.Optional("include_homeassistant", default=True): bool,
         vol.Optional("name"): str,
         vol.Optional("password"): str,

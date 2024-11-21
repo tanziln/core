@@ -43,7 +43,7 @@ from .const import (
     EXCLUDE_FROM_BACKUP,
     LOGGER,
 )
-from .models import AgentBackup
+from .models import AgentBackup, Folder
 from .util import read_backup
 
 
@@ -94,7 +94,7 @@ class BackupReaderWriter(abc.ABC):
         include_addons: list[str] | None,
         include_all_addons: bool,
         include_database: bool,
-        include_folders: list[str] | None,
+        include_folders: list[Folder] | None,
         include_homeassistant: bool,
         on_progress: Callable[[BackupProgress], None] | None,
         password: str | None,
@@ -292,7 +292,7 @@ class BackupManager:
         """Get a backup."""
         backup: Backup | None = None
         agent_errors: dict[str, Exception] = {}
-        agent_ids = list(self.backup_agents.keys())
+        agent_ids = list(self.backup_agents)
 
         get_backup_results = await asyncio.gather(
             *(
@@ -327,10 +327,26 @@ class BackupManager:
 
         return (backup, agent_errors)
 
-    async def async_delete_backup(self, backup_id: str) -> None:
+    async def async_delete_backup(self, backup_id: str) -> dict[str, Exception]:
         """Delete a backup."""
-        for agent in self.backup_agents.values():
-            await agent.async_delete_backup(backup_id)
+        agent_errors: dict[str, Exception] = {}
+        agent_ids = list(self.backup_agents)
+
+        delete_backup_results = await asyncio.gather(
+            *(
+                agent.async_delete_backup(backup_id)
+                for agent in self.backup_agents.values()
+            ),
+            return_exceptions=True,
+        )
+        for idx, result in enumerate(delete_backup_results):
+            if isinstance(result, BackupAgentError):
+                agent_errors[agent_ids[idx]] = result
+                continue
+            if isinstance(result, BaseException):
+                raise result
+
+        return agent_errors
 
     async def async_receive_backup(
         self,
@@ -423,7 +439,7 @@ class BackupManager:
         include_addons: list[str] | None,
         include_all_addons: bool,
         include_database: bool,
-        include_folders: list[str] | None,
+        include_folders: list[Folder] | None,
         include_homeassistant: bool,
         name: str | None,
         on_progress: Callable[[BackupProgress], None] | None,
@@ -550,7 +566,7 @@ class CoreBackupReaderWriter(BackupReaderWriter):
         include_addons: list[str] | None,
         include_all_addons: bool,
         include_database: bool,
-        include_folders: list[str] | None,
+        include_folders: list[Folder] | None,
         include_homeassistant: bool,
         on_progress: Callable[[BackupProgress], None] | None,
         password: str | None,
