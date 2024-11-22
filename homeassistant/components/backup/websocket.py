@@ -7,6 +7,7 @@ import voluptuous as vol
 from homeassistant.components import websocket_api
 from homeassistant.core import HomeAssistant, callback
 
+from .config import ScheduleState
 from .const import DATA_MANAGER, LOGGER
 from .manager import BackupProgress
 from .models import Folder
@@ -17,7 +18,6 @@ def async_register_websocket_handlers(hass: HomeAssistant, with_hassio: bool) ->
     """Register websocket commands."""
     websocket_api.async_register_command(hass, backup_agents_download)
     websocket_api.async_register_command(hass, backup_agents_info)
-    websocket_api.async_register_command(hass, backup_agents_list_backups)
 
     if with_hassio:
         websocket_api.async_register_command(hass, handle_backup_end)
@@ -116,6 +116,10 @@ async def handle_delete(
         vol.Required("backup_id"): str,
         vol.Required("agent_id"): str,
         vol.Optional("password"): str,
+        vol.Optional("restore_addons"): [str],
+        vol.Optional("restore_database", default=True): bool,
+        vol.Optional("restore_folders"): [vol.Coerce(Folder)],
+        vol.Optional("restore_homeassistant", default=True): bool,
     }
 )
 @websocket_api.async_response
@@ -129,6 +133,10 @@ async def handle_restore(
         msg["backup_id"],
         agent_id=msg["agent_id"],
         password=msg.get("password"),
+        restore_addons=msg.get("restore_addons"),
+        restore_database=msg["restore_database"],
+        restore_folders=msg.get("restore_folders"),
+        restore_homeassistant=msg["restore_homeassistant"],
     )
     connection.send_result(msg["id"])
 
@@ -234,23 +242,6 @@ async def backup_agents_info(
 
 
 @websocket_api.require_admin
-@websocket_api.websocket_command({vol.Required("type"): "backup/agents/list_backups"})
-@websocket_api.async_response
-async def backup_agents_list_backups(
-    hass: HomeAssistant,
-    connection: websocket_api.ActiveConnection,
-    msg: dict[str, Any],
-) -> None:
-    """Return a list of uploaded backups."""
-    manager = hass.data[DATA_MANAGER]
-    backups: list[dict[str, Any]] = []
-    for agent_id, agent in manager.backup_agents.items():
-        _listed_backups = await agent.async_list_backups()
-        backups.extend({**b.as_dict(), "agent_id": agent_id} for b in _listed_backups)
-    connection.send_result(msg["id"], backups)
-
-
-@websocket_api.require_admin
 @websocket_api.websocket_command(
     {
         vol.Required("type"): "backup/agents/download",
@@ -306,7 +297,19 @@ async def handle_config_info(
 @websocket_api.websocket_command(
     {
         vol.Required("type"): "backup/config/update",
+        vol.Optional("create_backup"): vol.Schema(
+            {
+                vol.Optional("agent_ids"): vol.All(list[str], vol.Length(min=1)),
+                vol.Optional("include_addons"): vol.Any(list[str], None),
+                vol.Optional("include_all_addons"): bool,
+                vol.Optional("include_database"): bool,
+                vol.Optional("include_folders"): vol.Any([vol.Coerce(Folder)], None),
+                vol.Optional("name"): vol.Any(str, None),
+                vol.Optional("password"): vol.Any(str, None),
+            },
+        ),
         vol.Optional("max_copies"): int,
+        vol.Optional("schedule"): vol.All(str, vol.Coerce(ScheduleState)),
     }
 )
 @websocket_api.async_response
