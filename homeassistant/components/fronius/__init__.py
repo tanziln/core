@@ -226,7 +226,11 @@ class FroniusSolarNet:
                 _LOGGER.debug("Re-scan failed for %s", self.host)
                 return inverter_infos
 
-            raise ConfigEntryNotReady from err
+            raise ConfigEntryNotReady(
+                translation_domain=DOMAIN,
+                translation_key="entry_cannot_connect",
+                translation_placeholders={"host": self.host},
+            ) from err
 
         for inverter in _inverter_info["inverters"]:
             solar_net_id = inverter["device_id"]["value"]
